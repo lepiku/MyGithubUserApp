@@ -12,3 +12,9 @@ data class GithubUser(
     @Json(name = "avatar_url")
     val avatarUrl: String,
 )
+
+data class GithubUserQueryResponse(
+    @Json(name = "total_count")
+    val totalCount: Int,
+    val items: List<GithubUser>,
+)
