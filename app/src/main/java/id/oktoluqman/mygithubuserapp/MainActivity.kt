@@ -6,11 +6,12 @@ import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.oktoluqman.mygithubuserapp.databinding.ActivityMainBinding
+import id.oktoluqman.mygithubuserapp.model.GithubUserOld
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var githubUsers = arrayListOf<GithubUser>()
+    private var githubUsers = arrayListOf<GithubUserOld>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val dataAvatar = resources.obtainTypedArray(R.array.avatar)
 
         for (position in dataUsername.indices) {
-            val mGithubUser = GithubUser(
+            val mGithubUser = GithubUserOld(
                 dataUsername[position],
                 dataName[position],
                 dataLocation[position],
@@ -64,9 +65,9 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun navigateToGithubUserDetail(githubUser: GithubUser) {
+    private fun navigateToGithubUserDetail(githubUserOld: GithubUserOld) {
         val intent = Intent(this@MainActivity, GithubUserDetailActivity::class.java)
-        intent.putExtra(GithubUserDetailActivity.EXTRA_GITHUB_USER, githubUser)
+        intent.putExtra(GithubUserDetailActivity.EXTRA_GITHUB_USER, githubUserOld)
         startActivity(intent)
     }
 }

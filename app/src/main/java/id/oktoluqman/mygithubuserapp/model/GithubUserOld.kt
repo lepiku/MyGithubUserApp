@@ -1,10 +1,10 @@
-package id.oktoluqman.mygithubuserapp
+package id.oktoluqman.mygithubuserapp.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class GithubUser(
+data class GithubUserOld(
     var username: String,
     var name: String,
     var location: String,

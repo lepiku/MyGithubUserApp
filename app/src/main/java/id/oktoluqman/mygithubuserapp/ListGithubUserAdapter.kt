@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.oktoluqman.mygithubuserapp.databinding.ItemRowGithubUserBinding
+import id.oktoluqman.mygithubuserapp.model.GithubUserOld
 
 class ListGithubUserAdapter(
-    private val listGithubUser: ArrayList<GithubUser>,
-    private val onItemClickCallback: (data: GithubUser) -> Unit
+    private val listGithubUserOld: ArrayList<GithubUserOld>,
+    private val onItemClickCallback: (data: GithubUserOld) -> Unit
 ) : RecyclerView.Adapter<ListGithubUserAdapter.ListViewHolder>() {
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -25,7 +26,7 @@ class ListGithubUserAdapter(
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val mGithubUser = listGithubUser[position]
+        val mGithubUser = listGithubUserOld[position]
 
         Glide.with(holder.itemView.context)
             .load(mGithubUser.avatar)
@@ -40,6 +41,6 @@ class ListGithubUserAdapter(
     }
 
     override fun getItemCount(): Int {
-        return listGithubUser.size
+        return listGithubUserOld.size
     }
 }

@@ -7,10 +7,11 @@ import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
 import id.oktoluqman.mygithubuserapp.databinding.ActivityGithubUserDetailBinding
+import id.oktoluqman.mygithubuserapp.model.GithubUserOld
 
 class GithubUserDetailActivity : AppCompatActivity() {
 
-    private lateinit var mGithubUser: GithubUser
+    private lateinit var mGithubUserOld: GithubUserOld
     private lateinit var binding: ActivityGithubUserDetailBinding
 
     companion object {
@@ -25,7 +26,7 @@ class GithubUserDetailActivity : AppCompatActivity() {
         loadUser()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = mGithubUser.name
+        supportActionBar?.title = mGithubUserOld.name
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -48,20 +49,20 @@ class GithubUserDetailActivity : AppCompatActivity() {
     }
 
     private fun loadUser() {
-        mGithubUser = intent.getParcelableExtra(EXTRA_GITHUB_USER)
+        mGithubUserOld = intent.getParcelableExtra(EXTRA_GITHUB_USER)!!
 
-        Glide.with(this).load(mGithubUser.avatar).into(binding.imgUserPhoto)
-        binding.tvUserName.text = mGithubUser.name
-        binding.tvUserUsername.text = mGithubUser.username
-        binding.tvUserLocation.text = mGithubUser.location
-        binding.tvUserCompany.text = getString(R.string.company, mGithubUser.company)
-        binding.tvUserRepository.text = getString(R.string.repository, mGithubUser.repository)
-        binding.tvUserFollowers.text = getString(R.string.followers, mGithubUser.followers)
-        binding.tvUserFollowing.text = getString(R.string.following, mGithubUser.following)
+        Glide.with(this).load(mGithubUserOld.avatar).into(binding.imgUserPhoto)
+        binding.tvUserName.text = mGithubUserOld.name
+        binding.tvUserUsername.text = mGithubUserOld.username
+        binding.tvUserLocation.text = mGithubUserOld.location
+        binding.tvUserCompany.text = getString(R.string.company, mGithubUserOld.company)
+        binding.tvUserRepository.text = getString(R.string.repository, mGithubUserOld.repository)
+        binding.tvUserFollowers.text = getString(R.string.followers, mGithubUserOld.followers)
+        binding.tvUserFollowing.text = getString(R.string.following, mGithubUserOld.following)
     }
 
     fun shareUser() {
-        val sharedText = "https://github.com/${mGithubUser.username}/"
+        val sharedText = "https://github.com/${mGithubUserOld.username}/"
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "plain/text"
         shareIntent.putExtra(Intent.EXTRA_TEXT, sharedText)
