@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                 if (p0 != null) {
                     showLoading(true)
                     mainViewModel.setUsers(p0)
+                    binding.searchView.clearFocus()
                 }
                 return false
             }
