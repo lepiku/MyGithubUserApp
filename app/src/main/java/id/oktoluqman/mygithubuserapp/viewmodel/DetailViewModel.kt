@@ -3,6 +3,7 @@ package id.oktoluqman.mygithubuserapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.squareup.moshi.Moshi
@@ -15,7 +16,7 @@ import id.oktoluqman.mygithubuserapp.model.GithubUserDetail
 import java.lang.reflect.Type
 
 
-class DetailViewModel {
+class DetailViewModel : ViewModel() {
     companion object {
         private val TAG = DetailViewModel::class.java.simpleName
         const val URL_DETAIL_USER = "https://api.github.com/users/%s"
@@ -54,7 +55,7 @@ class DetailViewModel {
     private fun <T> getData(urlFormat: String, classFile: Type, save: (response: T?) -> Unit) {
         val url = urlFormat.format(githubUser.username)
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", Constants.GITHUB_APIKEY)
+        client.addHeader("Authorization", Constants.GITHUB_API_KEY)
         client.addHeader("User-Agent", "request")
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(

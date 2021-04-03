@@ -22,12 +22,9 @@ class MainViewModel : ViewModel() {
     private val listGithubUsers = MutableLiveData<List<GithubUser>>()
 
     fun setUsers(query: String) {
-        // temporary clear users
-        listGithubUsers.postValue(ArrayList())
-
         val url = "https://api.github.com/search/users?q=$query"
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", Constants.GITHUB_APIKEY)
+        client.addHeader("Authorization", Constants.GITHUB_API_KEY)
         client.addHeader("User-Agent", "request")
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(

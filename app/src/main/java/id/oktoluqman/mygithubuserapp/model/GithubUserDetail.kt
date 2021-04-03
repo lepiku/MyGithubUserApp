@@ -12,15 +12,15 @@ data class GithubUserDetail(
     @Json(name = "avatar_url")
     val avatarUrl: String,
 
-    val name: String,
+    val name: String?,
 
-    val company: String,
+    val company: String?,
 
-    val blog: String,
+    val blog: String?,
 
-    val location: String,
+    val location: String?,
 
-    val bio: String,
+    val bio: String?,
 
     @Json(name = "public_repos")
     val publicRepos: Int,

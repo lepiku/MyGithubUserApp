@@ -3,16 +3,21 @@ package id.oktoluqman.mygithubuserapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.oktoluqman.mygithubuserapp.databinding.ActivityMainBinding
-import id.oktoluqman.mygithubuserapp.model.GithubUserOld
+import id.oktoluqman.mygithubuserapp.model.GithubUser
 import id.oktoluqman.mygithubuserapp.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
@@ -26,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showRecyclerList() {
         val adapter = ListGithubUserAdapter {
-//            navigateToGithubUserDetail(it)
+            navigateToGithubUserDetail(it)
         }
 
         binding.rvGithubUser.layoutManager = LinearLayoutManager(this)
@@ -62,23 +67,26 @@ class MainActivity : AppCompatActivity() {
         // get result
         mainViewModel.getUsers().observe(this, { listGithubUser ->
             if (listGithubUser != null) {
+                Log.d(TAG, "showRecyclerList: result done?")
                 adapter.setData(listGithubUser)
                 showLoading(false)
             }
         })
     }
 
-    private fun navigateToGithubUserDetail(githubUserOld: GithubUserOld) {
+    private fun navigateToGithubUserDetail(githubUser: GithubUser) {
         val intent = Intent(this@MainActivity, GithubUserDetailActivity::class.java)
-        intent.putExtra(GithubUserDetailActivity.EXTRA_GITHUB_USER, githubUserOld)
+        intent.putExtra(GithubUserDetailActivity.EXTRA_GITHUB_USER, githubUser)
         startActivity(intent)
     }
 
     private fun showLoading(state: Boolean) {
         if (state) {
             binding.progressBar.visibility = View.VISIBLE
+            binding.progressBackground.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.GONE
+            binding.progressBackground.visibility = View.GONE
         }
     }
 }

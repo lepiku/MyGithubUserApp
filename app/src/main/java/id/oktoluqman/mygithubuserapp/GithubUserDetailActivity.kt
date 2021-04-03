@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import id.oktoluqman.mygithubuserapp.databinding.ActivityGithubUserDetailBinding
-import id.oktoluqman.mygithubuserapp.model.GithubUserDetail
+import id.oktoluqman.mygithubuserapp.model.GithubUser
+import id.oktoluqman.mygithubuserapp.viewmodel.DetailViewModel
 
 class GithubUserDetailActivity : AppCompatActivity() {
-
-    private lateinit var mGithubUser: GithubUserDetail
+    private lateinit var mGithubUser: GithubUser
+    private lateinit var detailViewModel: DetailViewModel
     private lateinit var binding: ActivityGithubUserDetailBinding
 
     companion object {
@@ -23,10 +26,30 @@ class GithubUserDetailActivity : AppCompatActivity() {
         binding = ActivityGithubUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadUser()
-
+        mGithubUser = intent.getParcelableExtra(EXTRA_GITHUB_USER)!!
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = mGithubUser.name
+        supportActionBar?.title = mGithubUser.username
+        showLoading(true)
+
+        detailViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(DetailViewModel::class.java)
+
+        detailViewModel.setUser(mGithubUser)
+
+        detailViewModel.getDetail().observe(this) {
+            showLoading(false)
+            binding.tvUserName.text = it.name
+            binding.tvUserUsername.text = it.username
+            binding.tvUserLocation.text = it.location
+            binding.tvUserCompany.text = getString(R.string.company, it.company)
+            binding.tvUserRepository.text = getString(R.string.repository, it.publicRepos)
+            binding.tvUserFollowers.text = getString(R.string.followers, it.followers)
+            binding.tvUserFollowing.text = getString(R.string.following, it.following)
+
+            Glide.with(this).load(it.avatarUrl).into(binding.imgUserPhoto)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -48,24 +71,22 @@ class GithubUserDetailActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadUser() {
-        mGithubUser = intent.getParcelableExtra(EXTRA_GITHUB_USER)!!
-
-        Glide.with(this).load(mGithubUser.avatarUrl).into(binding.imgUserPhoto)
-        binding.tvUserName.text = mGithubUser.name
-        binding.tvUserUsername.text = mGithubUser.username
-        binding.tvUserLocation.text = mGithubUser.location
-        binding.tvUserCompany.text = getString(R.string.company, mGithubUser.company)
-        binding.tvUserRepository.text = getString(R.string.repository, mGithubUser.publicRepos)
-        binding.tvUserFollowers.text = getString(R.string.followers, mGithubUser.followers)
-        binding.tvUserFollowing.text = getString(R.string.following, mGithubUser.following)
-    }
-
-    fun shareUser() {
-        val sharedText = "https://github.com/${mGithubUser.username}/"
+    private fun shareUser() {
+        val sharedText = "https://github.com/${mGithubUser.username}"
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "plain/text"
         shareIntent.putExtra(Intent.EXTRA_TEXT, sharedText)
         startActivity(Intent.createChooser(shareIntent, "Share via"))
+    }
+
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.progressBackground.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+            binding.progressBackground.visibility = View.GONE
+        }
     }
 }
