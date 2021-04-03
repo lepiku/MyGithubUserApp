@@ -7,15 +7,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.oktoluqman.mygithubuserapp.databinding.ItemRowGithubUserBinding
-import id.oktoluqman.mygithubuserapp.model.GithubUserOld
+import id.oktoluqman.mygithubuserapp.model.GithubUser
 
 class ListGithubUserAdapter(
-    private val listGithubUserOld: ArrayList<GithubUserOld>,
-    private val onItemClickCallback: (data: GithubUserOld) -> Unit
+    private val onItemClickCallback: (data: GithubUser) -> Unit
 ) : RecyclerView.Adapter<ListGithubUserAdapter.ListViewHolder>() {
 
-    class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val listGithubUser = ArrayList<GithubUser>()
+
+    inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var binding = ItemRowGithubUserBinding.bind(itemView)
+
+        fun bind(mGithubUser: GithubUser) {
+            Glide.with(itemView.context)
+                .load(mGithubUser.avatarUrl)
+                .apply(RequestOptions().override(72, 72))
+                .into(binding.imgItemPhoto)
+
+            binding.tvItemUsername.text = mGithubUser.username
+            binding.tvItemName.text = mGithubUser.username
+
+            itemView.setOnClickListener { onItemClickCallback(mGithubUser) }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -26,21 +39,16 @@ class ListGithubUserAdapter(
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val mGithubUser = listGithubUserOld[position]
-
-        Glide.with(holder.itemView.context)
-            .load(mGithubUser.avatar)
-            .apply(RequestOptions().override(72, 72))
-            .into(holder.binding.imgItemPhoto)
-
-        holder.binding.tvItemUsername.text = mGithubUser.username
-        holder.binding.tvItemName.text = mGithubUser.name
-        holder.binding.tvItemLocation.text = mGithubUser.location
-
-        holder.itemView.setOnClickListener { onItemClickCallback(mGithubUser) }
+        holder.bind(listGithubUser[position])
     }
 
     override fun getItemCount(): Int {
-        return listGithubUserOld.size
+        return listGithubUser.size
+    }
+
+    fun setData(items: List<GithubUser>) {
+        listGithubUser.clear()
+        listGithubUser.addAll(items)
+        notifyDataSetChanged()
     }
 }

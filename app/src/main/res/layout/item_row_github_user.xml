@@ -41,14 +41,4 @@
         app:layout_constraintStart_toStartOf="@+id/tv_item_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_item_name" />
 
-    <TextView
-        android:id="@+id/tv_item_location"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/location"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_item_username"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_username" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,71 +3,81 @@ package id.oktoluqman.mygithubuserapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.oktoluqman.mygithubuserapp.databinding.ActivityMainBinding
 import id.oktoluqman.mygithubuserapp.model.GithubUserOld
+import id.oktoluqman.mygithubuserapp.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
-    private var githubUsers = arrayListOf<GithubUserOld>()
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        addItem()
         showRecyclerList()
     }
 
-    private fun addItem() {
-        val dataUsername = resources.getStringArray(R.array.username)
-        val dataName = resources.getStringArray(R.array.name)
-        val dataLocation = resources.getStringArray(R.array.location)
-        val dataRepository = resources.getStringArray(R.array.repository)
-        val dataCompany = resources.getStringArray(R.array.company)
-        val dataFollowers = resources.getStringArray(R.array.followers)
-        val dataFollowing = resources.getStringArray(R.array.following)
-        val dataAvatar = resources.obtainTypedArray(R.array.avatar)
-
-        for (position in dataUsername.indices) {
-            val mGithubUser = GithubUserOld(
-                dataUsername[position],
-                dataName[position],
-                dataLocation[position],
-                dataRepository[position].toInt(),
-                dataCompany[position],
-                dataFollowers[position].toInt(),
-                dataFollowing[position].toInt(),
-                dataAvatar.getResourceId(position, -1),
-            )
-            githubUsers.add(mGithubUser)
-        }
-
-        dataAvatar.recycle()
-    }
-
     private fun showRecyclerList() {
-        binding.rvGithubUser.layoutManager = LinearLayoutManager(this)
-        val listHeroAdapter = ListGithubUserAdapter(githubUsers) {
-            navigateToGithubUserDetail(it)
+        val adapter = ListGithubUserAdapter {
+//            navigateToGithubUserDetail(it)
         }
-        binding.rvGithubUser.adapter = listHeroAdapter
 
-        binding.rvGithubUser.setHasFixedSize(true)
+        binding.rvGithubUser.layoutManager = LinearLayoutManager(this)
+        binding.rvGithubUser.adapter = adapter
         binding.rvGithubUser.addItemDecoration(
             DividerItemDecoration(
                 binding.rvGithubUser.context,
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        mainViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(MainViewModel::class.java)
+
+        // set search
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                if (p0 != null) {
+                    showLoading(true)
+                    mainViewModel.setUsers(p0)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                return false
+            }
+        })
+
+        // get result
+        mainViewModel.getUsers().observe(this, { listGithubUser ->
+            if (listGithubUser != null) {
+                adapter.setData(listGithubUser)
+                showLoading(false)
+            }
+        })
     }
 
     private fun navigateToGithubUserDetail(githubUserOld: GithubUserOld) {
         val intent = Intent(this@MainActivity, GithubUserDetailActivity::class.java)
         intent.putExtra(GithubUserDetailActivity.EXTRA_GITHUB_USER, githubUserOld)
         startActivity(intent)
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 }
