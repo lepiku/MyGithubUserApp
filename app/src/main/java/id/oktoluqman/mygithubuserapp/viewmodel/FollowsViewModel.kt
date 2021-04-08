@@ -12,31 +12,28 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cz.msebera.android.httpclient.Header
 import id.oktoluqman.mygithubuserapp.Constants
 import id.oktoluqman.mygithubuserapp.model.GithubUser
-import id.oktoluqman.mygithubuserapp.model.GithubUserDetail
 import java.lang.reflect.Type
 
+class FollowsViewModel : ViewModel() {
+    private val githubUsers = MutableLiveData<List<GithubUser>>()
 
-class DetailViewModel : ViewModel() {
     companion object {
-        private val TAG = DetailViewModel::class.java.simpleName
-        const val URL_DETAIL_USER = "https://api.github.com/users/%s"
+        private val TAG = FollowsViewModel::class.java.simpleName
     }
 
-    private lateinit var githubUser: GithubUser
-    private val githubUserDetail = MutableLiveData<GithubUserDetail>()
-
-    fun setUser(githubUser: GithubUser) {
-        this.githubUser = githubUser
-        getData()
+    fun setUsers(username: String, urlFormat: String) {
+        val url = urlFormat.format(username)
+        getData(url)
     }
 
-    fun getDetail(): LiveData<GithubUserDetail> = githubUserDetail
-
-    private fun getData() {
-        val url = URL_DETAIL_USER.format(githubUser.username)
+    private fun getData(url: String) {
         val client = AsyncHttpClient()
         client.addHeader("Authorization", Constants.GITHUB_API_KEY)
         client.addHeader("User-Agent", "request")
+        val type: Type = Types.newParameterizedType(
+            MutableList::class.java,
+            GithubUser::class.java,
+        )
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
@@ -48,8 +45,10 @@ class DetailViewModel : ViewModel() {
                     val moshi = Moshi.Builder()
                         .addLast(KotlinJsonAdapterFactory())
                         .build()
-                    val jsonAdapter = moshi.adapter(GithubUserDetail::class.java)
-                    githubUserDetail.postValue(jsonAdapter.fromJson(result))
+                    val jsonAdapter = moshi.adapter<List<GithubUser>>(type)
+                    val response = jsonAdapter.fromJson(result)
+
+                    githubUsers.postValue(response)
 
                 } catch (e: Exception) {
                     Log.d(TAG, "onSuccess: ${e.message}")
@@ -66,4 +65,6 @@ class DetailViewModel : ViewModel() {
             }
         })
     }
+
+    fun getUsers(): LiveData<List<GithubUser>> = githubUsers
 }

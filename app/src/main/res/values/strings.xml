@@ -6,8 +6,10 @@
     <string name="location">Location</string>
     <string name="company">Company: %s</string>
     <string name="repository">%d Repositories</string>
-    <string name="followers">%d Followers</string>
-    <string name="following">%d Following</string>
+    <string name="n_followers">%d Followers</string>
+    <string name="n_following">%d Following</string>
+    <string name="list_follower">List Follower</string>
+    <string name="list_following">List Following</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
@@ -112,4 +114,6 @@
         <item>@drawable/user9</item>
         <item>@drawable/user10</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
