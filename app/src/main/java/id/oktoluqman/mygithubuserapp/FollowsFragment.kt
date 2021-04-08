@@ -49,6 +49,7 @@ class FollowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showLoading(true)
         createRecyclerView()
     }
 
@@ -85,6 +86,17 @@ class FollowsFragment : Fragment() {
         followsViewModel.setUsers(username, urlFormat)
         followsViewModel.getUsers().observe(this) {
             adapter.setData(it)
+            showLoading(false)
+        }
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            binding?.progressBar?.visibility = View.VISIBLE
+            binding?.progressBackground?.visibility = View.VISIBLE
+        } else {
+            binding?.progressBar?.visibility = View.GONE
+            binding?.progressBackground?.visibility = View.GONE
         }
     }
 }
