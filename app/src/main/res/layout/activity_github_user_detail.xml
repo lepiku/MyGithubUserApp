@@ -39,7 +39,7 @@
         tools:text="Full Name" />
 
     <TextView
-        android:id="@+id/tv_user_username"
+        android:id="@+id/tv_user_html_url"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,14 +47,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
-        tools:text="Username" />
+        tools:text="HTML URL" />
 
     <Space
         android:id="@+id/spacer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@id/tv_user_username"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_html_url"
         android:minHeight="16dp" />
 
     <TextView

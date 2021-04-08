@@ -95,7 +95,7 @@ class GithubUserDetailActivity : AppCompatActivity() {
         detailViewModel.getDetail().observe(this) {
             showLoading(false)
             binding.tvUserName.setTextOrGone(it.name)
-            binding.tvUserUsername.text = it.username
+            binding.tvUserHtmlUrl.text = it.htmlUrl
             binding.tvUserLocation.setTextOrGone(it.location)
             binding.tvUserCompany.setTextOrGone(it.company, R.string.company)
             binding.tvUserRepository.text =
