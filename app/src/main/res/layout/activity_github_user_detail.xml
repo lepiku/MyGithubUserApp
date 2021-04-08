@@ -11,24 +11,31 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_user_photo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:layout_marginTop="32dp"
         android:src="@android:color/darker_gray"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Space
+        android:id="@+id/spacer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@id/img_user_photo"
+        android:minHeight="16dp" />
+
     <TextView
         android:id="@+id/tv_user_name"
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_user_photo"
+        app:layout_constraintTop_toBottomOf="@+id/spacer2"
         tools:text="Full Name" />
 
     <TextView
@@ -42,16 +49,23 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
         tools:text="Username" />
 
+    <Space
+        android:id="@+id/spacer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_username"
+        android:minHeight="16dp" />
+
     <TextView
         android:id="@+id/tv_user_location"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_user_username"
+        app:layout_constraintTop_toBottomOf="@id/spacer"
         tools:text="Location" />
 
     <TextView

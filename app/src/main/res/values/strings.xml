@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">MyGithubUserApp</string>
     <string name="share">Share</string>
-    <string name="username">Username</string>
+    <string name="html_url">HTML URL</string>
     <string name="name">Name</string>
     <string name="location">Location</string>
     <string name="company">Company: %s</string>

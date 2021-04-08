@@ -21,11 +21,11 @@ class ListGithubUserAdapter(
         fun bind(mGithubUser: GithubUser) {
             Glide.with(itemView.context)
                 .load(mGithubUser.avatarUrl)
-                .apply(RequestOptions().override(72, 72))
+                .apply(RequestOptions().override(40, 40))
                 .into(binding.imgItemPhoto)
 
-            binding.tvItemUsername.text = mGithubUser.username
             binding.tvItemName.text = mGithubUser.username
+            binding.tvItemUsername.text = mGithubUser.htmlUrl
 
             itemView.setOnClickListener { onItemClickCallback(mGithubUser) }
         }

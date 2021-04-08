@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">MyGithubUserApp (id)</string>
     <string name="share">Sebarkan</string>
-    <string name="username">Username</string>
+    <string name="html_url">HTML URL</string>
     <string name="name">Nama</string>
     <string name="location">Lokasi</string>
     <string name="company">Perusahaan: %s</string>
