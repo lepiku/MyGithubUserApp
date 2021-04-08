@@ -97,8 +97,10 @@ class GithubUserDetailActivity : AppCompatActivity() {
             binding.tvUserUsername.text = it.username
             binding.tvUserLocation.text = it.location
             binding.tvUserCompany.text = getString(R.string.company, it.company)
-            binding.tvUserRepository.text = getString(R.string.repository, it.publicRepos)
-            binding.tvUserFollowers.text = getString(R.string.n_followers, it.followers)
+            binding.tvUserRepository.text =
+                resources.getQuantityString(R.plurals.n_repository, it.publicRepos, it.publicRepos)
+            binding.tvUserFollowers.text =
+                resources.getQuantityString(R.plurals.n_followers, it.followers, it.followers)
             binding.tvUserFollowing.text = getString(R.string.n_following, it.following)
 
             Glide.with(this).load(it.avatarUrl).into(binding.imgUserPhoto)

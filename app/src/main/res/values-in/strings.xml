@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyGithubUserApp (id)</string>
+    <string name="share">Sebarkan</string>
+    <string name="username">Username</string>
+    <string name="name">Nama</string>
+    <string name="location">Lokasi</string>
+    <string name="company">Perusahaan: %s</string>
+    <plurals name="n_repository">
+        <item quantity="other">%d Repositori</item>
+    </plurals>
+    <plurals name="n_followers">
+        <item quantity="other">%d Follower</item>
+    </plurals>
+    <string name="n_following">%d Following</string>
+    <string name="list_follower">Daftar Follower</string>
+    <string name="list_following">Daftar Following</string>
+</resources>
