@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -93,10 +94,10 @@ class GithubUserDetailActivity : AppCompatActivity() {
 
         detailViewModel.getDetail().observe(this) {
             showLoading(false)
-            binding.tvUserName.text = it.name
+            binding.tvUserName.setTextOrGone(it.name)
             binding.tvUserUsername.text = it.username
-            binding.tvUserLocation.text = it.location
-            binding.tvUserCompany.text = getString(R.string.company, it.company)
+            binding.tvUserLocation.setTextOrGone(it.location)
+            binding.tvUserCompany.setTextOrGone(it.company, R.string.company)
             binding.tvUserRepository.text =
                 resources.getQuantityString(R.plurals.n_repository, it.publicRepos, it.publicRepos)
             binding.tvUserFollowers.text =
@@ -104,6 +105,18 @@ class GithubUserDetailActivity : AppCompatActivity() {
             binding.tvUserFollowing.text = getString(R.string.n_following, it.following)
 
             Glide.with(this).load(it.avatarUrl).into(binding.imgUserPhoto)
+        }
+    }
+
+    private fun TextView.setTextOrGone(str: String?, strFormat: Int? = null) {
+        if (str != null) {
+            if (strFormat != null) {
+                this.text = resources.getString(strFormat, str)
+            } else {
+                this.text = str
+            }
+        } else {
+            this.visibility = View.GONE
         }
     }
 
