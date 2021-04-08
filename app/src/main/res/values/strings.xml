@@ -19,4 +19,6 @@
     <string name="n_following">%d Following</string>
     <string name="list_follower">List Follower</string>
     <string name="list_following">List Following</string>
+    <string name="change_language_settings">Change Language Settings</string>
+    <string name="search_user">Search User</string>
 </resources>

@@ -15,4 +15,6 @@
     <string name="n_following">%d Following</string>
     <string name="list_follower">Daftar Follower</string>
     <string name="list_following">Daftar Following</string>
+    <string name="change_language_settings">Pengaturan Ubah Bahasa</string>
+    <string name="search_user">Cari User</string>
 </resources>
