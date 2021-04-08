@@ -1,6 +1,5 @@
 package id.oktoluqman.mygithubuserapp
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,6 @@ import id.oktoluqman.mygithubuserapp.model.GithubUser
 class ListGithubUserAdapter(
     private val onItemClickCallback: (data: GithubUser) -> Unit
 ) : RecyclerView.Adapter<ListGithubUserAdapter.ListViewHolder>() {
-    companion object {
-        private const val TAG = "ListGithubUserAdapter"
-    }
 
     private val listGithubUser = ArrayList<GithubUser>()
 
@@ -54,7 +50,5 @@ class ListGithubUserAdapter(
         listGithubUser.clear()
         listGithubUser.addAll(items)
         notifyDataSetChanged()
-        if (items.isNotEmpty())
-            Log.d(TAG, "setData: item ${items[0]}")
     }
 }

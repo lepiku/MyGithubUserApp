@@ -7,14 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cz.msebera.android.httpclient.Header
 import id.oktoluqman.mygithubuserapp.Constants
 import id.oktoluqman.mygithubuserapp.model.GithubUser
 import id.oktoluqman.mygithubuserapp.model.GithubUserDetail
-import java.lang.reflect.Type
-
 
 class DetailViewModel : ViewModel() {
     companion object {
