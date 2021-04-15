@@ -60,8 +60,8 @@ class GithubUserHelper(context: Context) {
         return database.insert(DATABASE_TABLE, null, values)
     }
 
-    private fun deleteById(id: String): Int {
-        return database.delete(DATABASE_TABLE, "$_ID = '$id'", null)
+    fun deleteByUsername(username: String): Int {
+        return database.delete(DATABASE_TABLE, "$USERNAME = ?", arrayOf(username))
     }
 
     fun getAllUsers(): ArrayList<GithubUser> {
@@ -73,11 +73,11 @@ class GithubUserHelper(context: Context) {
         if (cursor.count > 0) {
             do {
                 user = GithubUser(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
                     username = cursor.getString(cursor.getColumnIndexOrThrow(USERNAME)),
                     htmlUrl = cursor.getString(cursor.getColumnIndexOrThrow(HTML_URL)),
                     avatarUrl = cursor.getString(cursor.getColumnIndexOrThrow(AVATAR_URL)),
                 )
-                user.id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID))
 
                 arrayList.add(user)
                 cursor.moveToNext()
@@ -96,7 +96,29 @@ class GithubUserHelper(context: Context) {
         return insert(args)
     }
 
-    fun deleteUser(id: Int): Int {
-        return deleteById("$id")
+    fun getByUsername(username: String): GithubUser? {
+        val cursor = database.query(
+            DATABASE_TABLE,
+            null,
+            "$USERNAME = ?",
+            arrayOf(username),
+            null,
+            null,
+            null
+        )
+        cursor.moveToFirst()
+
+        var user: GithubUser? = null
+        if (cursor.count > 0) {
+            user = GithubUser(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
+                username = cursor.getString(cursor.getColumnIndexOrThrow(USERNAME)),
+                htmlUrl = cursor.getString(cursor.getColumnIndexOrThrow(HTML_URL)),
+                avatarUrl = cursor.getString(cursor.getColumnIndexOrThrow(AVATAR_URL)),
+            )
+        }
+        cursor.close()
+
+        return user
     }
 }

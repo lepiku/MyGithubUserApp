@@ -14,13 +14,17 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import id.oktoluqman.mygithubuserapp.databinding.ActivityGithubUserDetailBinding
+import id.oktoluqman.mygithubuserapp.db.GithubUserHelper
 import id.oktoluqman.mygithubuserapp.model.GithubUser
 import id.oktoluqman.mygithubuserapp.viewmodel.DetailViewModel
+import kotlin.properties.Delegates
 
 class GithubUserDetailActivity : AppCompatActivity() {
     private lateinit var mGithubUser: GithubUser
     private lateinit var detailViewModel: DetailViewModel
     private lateinit var binding: ActivityGithubUserDetailBinding
+    private lateinit var githubUserHelper: GithubUserHelper
+    private var statusFavorite = false
 
     companion object {
         const val EXTRA_GITHUB_USER = "extra_github_user"
@@ -37,8 +41,26 @@ class GithubUserDetailActivity : AppCompatActivity() {
         binding = ActivityGithubUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mGithubUser = intent.getParcelableExtra(EXTRA_GITHUB_USER)!!
+
         createHeader()
         createTabLayout()
+
+        githubUserHelper = GithubUserHelper.getInstance(applicationContext)
+        githubUserHelper.open()
+        val user = githubUserHelper.getByUsername(mGithubUser.username)
+        setStatusFavorite(user != null)
+        githubUserHelper.close()
+
+        binding.btnFavorite.setOnClickListener {
+            setStatusFavorite(!statusFavorite)
+            githubUserHelper.open()
+            if (statusFavorite)
+                githubUserHelper.insertUser(mGithubUser)
+            else
+                githubUserHelper.deleteByUsername(mGithubUser.username)
+            githubUserHelper.close()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -80,7 +102,6 @@ class GithubUserDetailActivity : AppCompatActivity() {
     }
 
     private fun createHeader() {
-        mGithubUser = intent.getParcelableExtra(EXTRA_GITHUB_USER)!!
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = mGithubUser.username
         showLoading(true)
@@ -129,5 +150,13 @@ class GithubUserDetailActivity : AppCompatActivity() {
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
+    }
+
+    private fun setStatusFavorite(status: Boolean) {
+        statusFavorite = status
+        if (status)
+            binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        else
+            binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
     }
 }
