@@ -17,6 +17,8 @@ android {
         versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GITHUB_TOKEN", '"$System.env.github_dicoding_token"')
     }
 
     buildTypes {
