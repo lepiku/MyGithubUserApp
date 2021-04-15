@@ -17,4 +17,5 @@
     <string name="list_following">Daftar Following</string>
     <string name="change_language_settings">Pengaturan Ubah Bahasa</string>
     <string name="search_user">Cari User</string>
+    <string name="favorites">Favorit</string>
 </resources>

@@ -12,21 +12,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import id.oktoluqman.mygithubuserapp.databinding.ActivityFavoriteBinding
 import id.oktoluqman.mygithubuserapp.databinding.ActivityMainBinding
+import id.oktoluqman.mygithubuserapp.db.GithubUserHelper
 import id.oktoluqman.mygithubuserapp.model.GithubUser
+import id.oktoluqman.mygithubuserapp.viewmodel.FavoriteViewModel
 import id.oktoluqman.mygithubuserapp.viewmodel.MainViewModel
 
-class MainActivity : AppCompatActivity() {
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
-    }
+class FavoriteActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityFavoriteBinding
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var githubUserHelper: GithubUserHelper
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
+    companion object {
+        private val TAG = FavoriteActivity::class.java.simpleName
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         showRecyclerList()
@@ -46,57 +50,40 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        mainViewModel = ViewModelProvider(
+        favoriteViewModel = ViewModelProvider(
             this,
             ViewModelProvider.NewInstanceFactory()
-        ).get(MainViewModel::class.java)
+        ).get(FavoriteViewModel::class.java)
 
-        // set search
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                if (p0 != null) {
-                    showLoading(true)
-                    mainViewModel.setUsers(p0)
-                    binding.searchView.clearFocus()
-                }
-                return false
-            }
-
-            override fun onQueryTextChange(p0: String?): Boolean {
-                return false
-            }
-        })
+        githubUserHelper = GithubUserHelper.getInstance(applicationContext)
 
         // get result
-        mainViewModel.getUsers().observe(this, { listGithubUser ->
+        favoriteViewModel.getUsers().observe(this, { listGithubUser ->
             if (listGithubUser != null) {
                 Log.d(TAG, "showRecyclerList: result done?")
                 adapter.setData(listGithubUser)
-                showLoading(false)
             }
         })
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = resources.getString(R.string.favorites)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        githubUserHelper.open()
+        val users = githubUserHelper.getAllUsers()
+        favoriteViewModel.setUsers(users)
+        githubUserHelper.close()
     }
 
     private fun navigateToGithubUserDetail(githubUser: GithubUser) {
-        val intent = Intent(this@MainActivity, GithubUserDetailActivity::class.java)
+        val intent = Intent(this, GithubUserDetailActivity::class.java)
         intent.putExtra(GithubUserDetailActivity.EXTRA_GITHUB_USER, githubUser)
         startActivity(intent)
     }
 
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.progressBackground.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-            binding.progressBackground.visibility = View.GONE
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_change_settings -> {
@@ -109,5 +96,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 }
