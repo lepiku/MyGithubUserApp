@@ -6,6 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class GithubUser(
+    var id: Int = 0,
+
     @Json(name = "login")
     val username: String,
 
