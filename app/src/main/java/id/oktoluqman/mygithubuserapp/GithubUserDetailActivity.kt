@@ -19,7 +19,7 @@ import id.oktoluqman.mygithubuserapp.viewmodel.DetailViewModel
 
 class GithubUserDetailActivity : AppCompatActivity() {
     private lateinit var mGithubUser: GithubUser
-    lateinit var detailViewModel: DetailViewModel
+    private lateinit var detailViewModel: DetailViewModel
     private lateinit var binding: ActivityGithubUserDetailBinding
 
     companion object {
