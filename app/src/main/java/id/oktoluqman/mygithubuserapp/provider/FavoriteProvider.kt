@@ -62,6 +62,7 @@ class FavoriteProvider : ContentProvider() {
     ): Cursor? {
         return when (sUriMatcher.match(uri)) {
             FAVORITE -> githubUserHelper.queryAll()
+            FAVORITE_USERNAME -> githubUserHelper.getByUsername(uri.lastPathSegment.toString())
             else -> null
         }
     }

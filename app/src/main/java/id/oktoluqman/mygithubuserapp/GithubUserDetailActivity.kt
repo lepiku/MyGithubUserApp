@@ -1,6 +1,8 @@
 package id.oktoluqman.mygithubuserapp
 
+import android.content.ContentValues
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,16 +16,20 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import id.oktoluqman.mygithubuserapp.databinding.ActivityGithubUserDetailBinding
-import id.oktoluqman.mygithubuserapp.db.GithubUserHelper
+import id.oktoluqman.mygithubuserapp.db.DatabaseContract
+import id.oktoluqman.mygithubuserapp.db.DatabaseContract.FavoriteColumns.Companion.CONTENT_URI
+import id.oktoluqman.mygithubuserapp.helper.MappingHelper
 import id.oktoluqman.mygithubuserapp.model.GithubUser
 import id.oktoluqman.mygithubuserapp.viewmodel.DetailViewModel
-import kotlin.properties.Delegates
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class GithubUserDetailActivity : AppCompatActivity() {
     private lateinit var mGithubUser: GithubUser
     private lateinit var detailViewModel: DetailViewModel
     private lateinit var binding: ActivityGithubUserDetailBinding
-    private lateinit var githubUserHelper: GithubUserHelper
     private var statusFavorite = false
 
     companion object {
@@ -46,20 +52,29 @@ class GithubUserDetailActivity : AppCompatActivity() {
         createHeader()
         createTabLayout()
 
-        githubUserHelper = GithubUserHelper.getInstance(applicationContext)
-        githubUserHelper.open()
-        val user = githubUserHelper.getByUsername(mGithubUser.username)
-        setStatusFavorite(user != null)
-        githubUserHelper.close()
+        GlobalScope.launch(Dispatchers.Main) {
+            val uriWithUsername = Uri.parse(CONTENT_URI.toString() + "/" + mGithubUser.username)
+            val defferedUser = async(Dispatchers.IO) {
+                val cursor = contentResolver.query(uriWithUsername, null, null, null, null)
+                MappingHelper.mapCursorToGithubUserArrayList(cursor)
+            }
+            val users = defferedUser.await()
+            setStatusFavorite(users.size > 0)
+        }
 
         binding.btnFavorite.setOnClickListener {
             setStatusFavorite(!statusFavorite)
-            githubUserHelper.open()
-            if (statusFavorite)
-                githubUserHelper.insertUser(mGithubUser)
-            else
-                githubUserHelper.deleteByUsername(mGithubUser.username)
-            githubUserHelper.close()
+            val user = mGithubUser
+
+            if (statusFavorite) {
+                val args = ContentValues()
+                args.put(DatabaseContract.FavoriteColumns.USERNAME, user.username)
+                args.put(DatabaseContract.FavoriteColumns.HTML_URL, user.htmlUrl)
+                args.put(DatabaseContract.FavoriteColumns.AVATAR_URL, user.avatarUrl)
+                contentResolver.insert(CONTENT_URI, args)
+            } else {
+                contentResolver.delete(Uri.parse("$CONTENT_URI/${user.username}"), null, null)
+            }
         }
     }
 
