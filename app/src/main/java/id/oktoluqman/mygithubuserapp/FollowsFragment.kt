@@ -84,7 +84,7 @@ class FollowsFragment : Fragment() {
         ).get(FollowsViewModel::class.java)
 
         followsViewModel.setUsers(username, urlFormat)
-        followsViewModel.getUsers().observe(this) {
+        followsViewModel.getUsers().observe(viewLifecycleOwner) {
             adapter.setData(it)
             showLoading(false)
         }

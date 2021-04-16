@@ -4,11 +4,13 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
+import java.util.*
 
 class MyPreferenceFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var REMINDER: String
     private lateinit var reminderPreference: SwitchPreference
+    private lateinit var alarmReceiver: AlarmReceiver
 
     override fun onCreatePreferences(bundle: Bundle?, s: String?) {
         addPreferencesFromResource(R.xml.preferences)
@@ -28,7 +30,22 @@ class MyPreferenceFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPref: SharedPreferences, key: String) {
         when (key) {
-            REMINDER -> reminderPreference.isChecked = sharedPref.getBoolean(REMINDER, false)
+            REMINDER -> {
+                val isEnabled = sharedPref.getBoolean(REMINDER, false)
+                reminderPreference.isChecked = isEnabled
+                if (isEnabled) {
+                    alarmReceiver.setRepeatingAlarm(
+                        requireContext(),
+                        "09:00",
+                        "Let's find popular users on GitHub!",
+                    )
+                } else {
+                    alarmReceiver.cancelRepeatingAlarm(requireContext())
+                }
+                reminderPreference.summary =
+                    alarmReceiver.isAlarmSet(requireContext()).toString()
+                        .capitalize(Locale.getDefault())
+            }
         }
     }
 
@@ -36,11 +53,14 @@ class MyPreferenceFragment : PreferenceFragmentCompat(),
         val sharedPref = preferenceManager.sharedPreferences
 
         reminderPreference.isChecked = sharedPref.getBoolean(REMINDER, false)
+        reminderPreference.summary =
+            alarmReceiver.isAlarmSet(requireContext()).toString().capitalize(Locale.getDefault())
     }
 
     private fun init() {
         REMINDER = resources.getString(R.string.key_reminder)
 
         reminderPreference = findPreference(REMINDER)!!
+        alarmReceiver = AlarmReceiver()
     }
 }
