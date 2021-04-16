@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ConsumerApp (id)</string>
+    <string name="share">Sebarkan</string>
+    <string name="html_url">HTML URL</string>
+    <string name="name">Nama</string>
+    <string name="location">Lokasi</string>
+    <string name="company">Perusahaan: %s</string>
+    <plurals name="n_repository">
+        <item quantity="other">%d Repositori</item>
+    </plurals>
+    <plurals name="n_followers">
+        <item quantity="other">%d Follower</item>
+    </plurals>
+    <string name="n_following">%d Following</string>
+    <string name="list_follower">Daftar Follower</string>
+    <string name="list_following">Daftar Following</string>
+    <string name="change_language_settings">Pengaturan Ubah Bahasa</string>
+    <string name="search_user">Cari User</string>
+    <string name="favorites">Favorit</string>
+    <string name="reminder">Pengingat jam 9:00 AM</string>
+    <string name="settings">Pengaturan</string>
+</resources>

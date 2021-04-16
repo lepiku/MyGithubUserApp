@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.oktoluqman.mygithubuserapp">
+    package="id.oktoluqman.consumerapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-
-    <permission
-        android:name="id.oktoluqman.mygithubuserapp.READ_DATABASE"
-        android:protectionLevel="normal" />
-    <permission
-        android:name="id.oktoluqman.mygithubuserapp.WRITE_DATABASE"
-        android:protectionLevel="normal" />
+    <uses-permission android:name="id.oktoluqman.mygithubuserapp.READ_DATABASE" />
+    <uses-permission android:name="id.oktoluqman.mygithubuserapp.WRITE_DATABASE" />
 
     <application
         android:allowBackup="true"
@@ -31,17 +25,9 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".AlarmReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <provider
-            android:name=".provider.FavoriteProvider"
-            android:authorities="id.oktoluqman.mygithubuserapp"
-            android:enabled="true"
-            android:exported="true"
-            android:readPermission="id.oktoluqman.mygithubuserapp.READ_DATABASE"
-            android:writePermission="id.oktoluqman.mygithubuserapp.WRITE_DATABASE" />
     </application>
 
+    <queries>
+        <package android:name="id.oktoluqman.mygithubuserapp" />
+    </queries>
 </manifest>

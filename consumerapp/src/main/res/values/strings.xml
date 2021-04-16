@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ConsumerApp</string>
+    <string name="share">Share</string>
+    <string name="html_url">HTML URL</string>
+    <string name="name">Name</string>
+    <string name="location">Location</string>
+    <string name="company">Company: %s</string>
+    <plurals name="n_repository">
+        <item quantity="zero">%d Repository</item>
+        <item quantity="one">%d Repository</item>
+        <item quantity="other">%d Repositories</item>
+    </plurals>
+    <plurals name="n_followers">
+        <item quantity="zero">%d Follower</item>
+        <item quantity="one">%d Follower</item>
+        <item quantity="other">%d Followers</item>
+    </plurals>
+    <string name="n_following">%d Following</string>
+    <string name="list_follower">List Follower</string>
+    <string name="list_following">List Following</string>
+    <string name="change_language_settings">Change Language Settings</string>
+    <string name="search_user">Search User</string>
+    <string name="favorites">Favorites</string>
+    <string name="reminder">Reminder at 9:00 AM</string>
+
+    <string name="settings">Settings</string>
+    <string name="key_reminder" translatable="false">reminder</string>
+</resources>

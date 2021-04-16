@@ -1,4 +1,4 @@
-package id.oktoluqman.mygithubuserapp
+package id.oktoluqman.consumerapp
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -92,8 +92,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val timeArray = time.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        val calendar = Calendar.getInstance()
 
+        val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]))
         calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]))
         calendar.set(Calendar.SECOND, 0)
