@@ -22,4 +22,8 @@
     <string name="change_language_settings">Change Language Settings</string>
     <string name="search_user">Search User</string>
     <string name="favorites">Favorites</string>
+    <string name="reminder">Reminder at 9:00 AM</string>
+
+    <string name="key_reminder" translatable="false">reminder</string>
+    <string name="settings">Settings</string>
 </resources>

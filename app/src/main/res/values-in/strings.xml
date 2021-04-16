@@ -18,4 +18,6 @@
     <string name="change_language_settings">Pengaturan Ubah Bahasa</string>
     <string name="search_user">Cari User</string>
     <string name="favorites">Favorit</string>
+    <string name="reminder">Pengingat jam 9:00 AM</string>
+    <string name="settings">Pengaturan</string>
 </resources>
