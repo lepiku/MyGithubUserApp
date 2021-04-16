@@ -73,8 +73,7 @@ class FavoriteActivity : AppCompatActivity() {
             }
         })
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = resources.getString(R.string.favorites)
+        supportActionBar?.title = resources.getString(R.string.app_name)
 
         loadUsers()
     }
