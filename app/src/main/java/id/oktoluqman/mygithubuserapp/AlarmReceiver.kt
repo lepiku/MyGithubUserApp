@@ -43,6 +43,9 @@ class AlarmReceiver : BroadcastReceiver() {
         val channelId = "Channel_1"
         val channelName = "AlarmManager channel"
 
+        val intent = Intent(context, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
         val notificationManagerCompat =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -53,6 +56,8 @@ class AlarmReceiver : BroadcastReceiver() {
             .setColor(ContextCompat.getColor(context, android.R.color.transparent))
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
             .setSound(alarmSound)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
 
         // Untuk android Oreo ke atas perlu menambahkan notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
