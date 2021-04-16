@@ -1,28 +1,28 @@
 package id.oktoluqman.mygithubuserapp
 
 import android.content.Intent
+import android.database.ContentObserver
 import android.os.Bundle
-import android.provider.Settings
+import android.os.Handler
+import android.os.HandlerThread
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.oktoluqman.mygithubuserapp.databinding.ActivityFavoriteBinding
-import id.oktoluqman.mygithubuserapp.databinding.ActivityMainBinding
-import id.oktoluqman.mygithubuserapp.db.GithubUserHelper
+import id.oktoluqman.mygithubuserapp.db.DatabaseContract.FavoriteColumns.Companion.CONTENT_URI
+import id.oktoluqman.mygithubuserapp.helper.MappingHelper
 import id.oktoluqman.mygithubuserapp.model.GithubUser
 import id.oktoluqman.mygithubuserapp.viewmodel.FavoriteViewModel
-import id.oktoluqman.mygithubuserapp.viewmodel.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class FavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteBinding
     private lateinit var favoriteViewModel: FavoriteViewModel
-    private lateinit var githubUserHelper: GithubUserHelper
 
     companion object {
         private val TAG = FavoriteActivity::class.java.simpleName
@@ -55,7 +55,17 @@ class FavoriteActivity : AppCompatActivity() {
             ViewModelProvider.NewInstanceFactory()
         ).get(FavoriteViewModel::class.java)
 
-        githubUserHelper = GithubUserHelper.getInstance(applicationContext)
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+        val myObserver = object : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean) {
+                super.onChange(selfChange)
+                loadUsers()
+            }
+        }
+
+        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
 
         // get result
         favoriteViewModel.getUsers().observe(this, { listGithubUser ->
@@ -71,11 +81,19 @@ class FavoriteActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        loadUsers()
+    }
 
-        githubUserHelper.open()
-        val users = githubUserHelper.getAllUsers()
-        favoriteViewModel.setUsers(users)
-        githubUserHelper.close()
+    private fun loadUsers() {
+        GlobalScope.launch(Dispatchers.Main) {
+            val defferedFavorites = async(Dispatchers.IO) {
+                val cursor = contentResolver.query(CONTENT_URI, null, null, null, null)
+                MappingHelper.mapCursorToGithubUserArrayList(cursor)
+            }
+            val favorites = defferedFavorites.await()
+
+            favoriteViewModel.setUsers(favorites)
+        }
     }
 
     private fun navigateToGithubUserDetail(githubUser: GithubUser) {
