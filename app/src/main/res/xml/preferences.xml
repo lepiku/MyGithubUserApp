@@ -9,6 +9,8 @@
 
     <Preference
         android:icon="@drawable/ic_baseline_language_24"
-        android:title="@string/change_language_settings" />
+        android:title="@string/change_language_settings">
+        <intent android:action="android.settings.LOCALE_SETTINGS" />
+    </Preference>
 
 </PreferenceScreen>
