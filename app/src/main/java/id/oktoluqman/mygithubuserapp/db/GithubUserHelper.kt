@@ -44,7 +44,7 @@ class GithubUserHelper(context: Context) {
             database.close()
     }
 
-    private fun queryAll(): Cursor {
+    fun queryAll(): Cursor {
         return database.query(
             DATABASE_TABLE,
             null,
@@ -56,7 +56,7 @@ class GithubUserHelper(context: Context) {
         )
     }
 
-    private fun insert(values: ContentValues?): Long {
+    fun insert(values: ContentValues?): Long {
         return database.insert(DATABASE_TABLE, null, values)
     }
 
