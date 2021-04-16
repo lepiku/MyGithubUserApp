@@ -30,7 +30,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val message = intent.getStringExtra(EXTRA_MESSAGE)
 
         if (message != null) {
-            showAlarmNotification(context, "Hello", message, ID_REPEATING)
+            showAlarmNotification(context, "GitHub App Reminder", message, ID_REPEATING)
         }
     }
 
@@ -88,9 +88,13 @@ class AlarmReceiver : BroadcastReceiver() {
         val timeArray = time.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]))
-        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]))
-        calendar.set(Calendar.SECOND, 0)
+
+        // DEBUG 10 seconds from now
+        calendar.add(Calendar.SECOND, 10)
+        val time = calendar.time
+//        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]))
+//        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]))
+//        calendar.set(Calendar.SECOND, 0)
 
         val pendingIntent = PendingIntent.getBroadcast(context, ID_REPEATING, intent, 0)
         alarmManager.setInexactRepeating(
