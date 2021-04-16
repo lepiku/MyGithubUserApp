@@ -5,7 +5,6 @@ import android.database.ContentObserver
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -70,17 +69,13 @@ class FavoriteActivity : AppCompatActivity() {
         // get result
         favoriteViewModel.getUsers().observe(this, { listGithubUser ->
             if (listGithubUser != null) {
-                Log.d(TAG, "showRecyclerList: result done?")
                 adapter.setData(listGithubUser)
             }
         })
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = resources.getString(R.string.favorites)
-    }
 
-    override fun onResume() {
-        super.onResume()
         loadUsers()
     }
 

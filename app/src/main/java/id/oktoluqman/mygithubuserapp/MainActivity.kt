@@ -2,8 +2,6 @@ package id.oktoluqman.mygithubuserapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,10 +15,6 @@ import id.oktoluqman.mygithubuserapp.model.GithubUser
 import id.oktoluqman.mygithubuserapp.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
-    }
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
@@ -70,7 +64,6 @@ class MainActivity : AppCompatActivity() {
         // get result
         mainViewModel.getUsers().observe(this, { listGithubUser ->
             if (listGithubUser != null) {
-                Log.d(TAG, "showRecyclerList: result done?")
                 adapter.setData(listGithubUser)
                 showLoading(false)
             }
@@ -97,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_favorite -> {
